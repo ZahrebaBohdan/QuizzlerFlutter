@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/hint.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'quizbrain.dart';
+
+QuizBrain quizBrain = QuizBrain();
+List<Icon> scoreKeeper = [];
 
 void main() => runApp(Quizzler());
 
@@ -7,6 +13,8 @@ class Quizzler extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        floatingActionButton: HintButton(),
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
           child: Padding(
@@ -25,19 +33,66 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+    setState(() {
+      if (correctAnswer == userPickedAnswer) {
+        scoreKeeper.add(Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(Icon(
+          Icons.close,
+          color: Colors.red,
+        ));
+      }
+      if (quizBrain.isFinished()) {
+        print('${quizBrain.isFinished()}');
+        quizBrain.reset();
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: 'Congratulations!',
+          desc: 'You\'ve completed the quiz',
+          buttons: [
+            DialogButton(
+              child: Text(
+                'Home',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              color: Color.fromRGBO(0, 179, 134, 1.0),
+              onPressed: () => Navigator.pop(context),
+            ),
+            DialogButton(
+              child: Text(
+                'Try again',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              color: Colors.cyan,
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ).show();
+      } else {
+        quizBrain.nextQuestion();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
+      children: [
         Expanded(
           flex: 5,
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -61,7 +116,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                checkAnswer(true);
               },
             ),
           ),
@@ -79,19 +134,13 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                checkAnswer(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Wrap(children: scoreKeeper),
       ],
     );
   }
 }
-
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/

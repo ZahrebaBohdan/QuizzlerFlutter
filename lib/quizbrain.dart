@@ -1,25 +1,11 @@
-# Quizzler ❓
+import 'package:quizzler/main.dart';
+import 'package:quizzler/question.dart';
 
-## What has been created
+class QuizBrain {
+  int _questionNumber = 0;
 
-We’re going to make a quiz app that tests your general knowledge. As one of the most popular types of apps on the app stores, you can create your own quiz for other people to enjoy!
-
-![Finished App](https://github.com/londonappbrewery/Images/blob/master/quizzler-demo.gif)
-
-## What I've learnt
-
-- Modularising your code into separate classes.
-- Dart classes and objects.
-- Using class constructors.
-- Extracting Widgets to refactor your code.
-- private and public modifiers in Dart.
-- How to use Dart lists.
-- The difference between var, const and final.
-
-## Code Snippet for Project
-
-```
-Question('Some cats are actually allergic to humans', true),
+  List<Question> _questionBank = [
+    Question('Some cats are actually allergic to humans', true),
     Question('You can lead a cow down stairs but not up stairs.', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
     Question('A slug\'s blood is green.', true),
@@ -44,7 +30,32 @@ Question('Some cats are actually allergic to humans', true),
     Question(
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
+  ];
 
-```
+  String getQuestionText() {
+    return _questionBank[_questionNumber].questionText;
+  }
 
-![End Banner](https://github.com/londonappbrewery/Images/blob/master/readme-end-banner.png)
+  bool getQuestionAnswer() {
+    return _questionBank[_questionNumber].questionAnswer;
+  }
+
+  void nextQuestion() {
+    if (_questionNumber < _questionBank.length - 1) {
+      _questionNumber++;
+    }
+  }
+
+  bool isFinished() {
+    if (_questionNumber == _questionBank.length - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void reset() {
+    _questionNumber = 0;
+    scoreKeeper.clear();
+  }
+}
