@@ -12,6 +12,7 @@ class Quizzler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Quizzler by Zahreba Bohdan',
       home: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         floatingActionButton: HintButton(),
