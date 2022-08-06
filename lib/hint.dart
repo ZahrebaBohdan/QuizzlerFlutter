@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'quizbrain.dart';
-import 'main.dart';
+import 'quizPage.dart';
 
 class HintButton extends StatefulWidget {
   const HintButton({Key key}) : super(key: key);

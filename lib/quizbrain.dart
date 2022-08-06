@@ -1,5 +1,5 @@
-import 'package:quizzler/main.dart';
 import 'package:quizzler/question.dart';
+import 'quizPage.dart';
 
 class QuizBrain {
   int _questionNumber = 0;
